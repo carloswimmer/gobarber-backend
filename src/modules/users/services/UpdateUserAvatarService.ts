@@ -1,4 +1,3 @@
-import path from 'path';
 import { inject, injectable } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
