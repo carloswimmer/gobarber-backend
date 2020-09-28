@@ -3,8 +3,6 @@ import { getDate, getDaysInMonth } from 'date-fns';
 
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
-// import User from '@modules/users/infra/typeorm/entities?s/IUsersRepository';
-
 interface IRequest {
   provider_id: string;
   month: number;
