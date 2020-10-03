@@ -42,7 +42,7 @@ class ResetPasswordService {
     const twoHoursLater = addHours(tokenCreatedAt, 2);
 
     if (isAfter(Date.now(), twoHoursLater)) {
-      throw new AppError('To late my friend...');
+      throw new AppError('This link expired, request a reset link again.');
     }
 
     const hashedPassword = await this.hashProvider.generateHash(password);
