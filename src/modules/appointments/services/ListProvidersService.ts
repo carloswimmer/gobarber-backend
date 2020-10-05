@@ -2,6 +2,7 @@ import { inject, injectable } from 'tsyringe';
 
 import User from '@modules/users/infra/typeorm/entities/User';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 
 interface IRequest {
   user_id: string;
@@ -12,14 +13,27 @@ class ListProvidersService {
   constructor(
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) {}
 
   public async execute({ user_id }: IRequest): Promise<User[]> {
-    const providers = await this.usersRepository.findAllProviders({
-      except_user_id: user_id,
-    });
+    let users = await this.cacheProvider.recover<User[]>(
+      `providers-list:${user_id}`,
+    );
 
-    return providers;
+    if (!users) {
+      users = await this.usersRepository.findAllProviders({
+        except_user_id: user_id,
+      });
+
+      await this.cacheProvider.save(`providers-list:${user_id}`, users);
+
+      console.log('foi buscar no banco e salvou no Redis');
+    }
+
+    return users;
   }
 }
 
