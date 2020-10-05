@@ -18,4 +18,4 @@ export default {
       name: 'Equipe GoBarber',
     },
   },
-};
+} as IMailConfig;

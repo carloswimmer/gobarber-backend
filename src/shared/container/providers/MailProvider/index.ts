@@ -5,11 +5,7 @@ import IMailProvider from './models/IMailProvider';
 import EtherealMailProvider from './implementations/EtherealMailProvider';
 import SESMailProvider from './implementations/SESMailProvider';
 
-interface IProviderConfig {
-  [key: string]: IMailProvider;
-}
-
-const providers: IProviderConfig = {
+const providers = {
   ethereal: container.resolve(EtherealMailProvider),
   ses: container.resolve(SESMailProvider),
 };
