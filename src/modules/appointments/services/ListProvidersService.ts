@@ -29,8 +29,6 @@ class ListProvidersService {
       });
 
       await this.cacheProvider.save(`providers-list:${user_id}`, users);
-
-      console.log('foi buscar no banco e salvou no Redis');
     }
 
     return users;
