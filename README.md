@@ -7,10 +7,6 @@
 [![TypeORM](https://img.shields.io/badge/TypeORM-0.2-FE0902?style=flat-square)](https://typeorm.io/)
 [![Jest](https://img.shields.io/badge/Jest-26-C21325?style=flat-square&logo=jest&logoColor=white)](https://jestjs.io/)
 
-[![Last commit](https://img.shields.io/github/last-commit/carloswimmer/gobarber-backend?style=flat-square)](https://github.com/carloswimmer/gobarber-backend/commits)
-[![GitHub stars](https://img.shields.io/github/stars/carloswimmer/gobarber-backend?style=flat-square&logo=github)](https://github.com/carloswimmer/gobarber-backend/stargazers)
-[![GitHub](https://img.shields.io/badge/GitHub-gobarber--backend-181717?style=flat-square&logo=github)](https://github.com/carloswimmer/gobarber-backend)
-
 REST API for **GoBarber**, a scheduling platform where clients book time with barbers and service providers. This service handles accounts, authentication, profiles, availability, appointments, and provider notifications—so the front end can focus on the experience.
 
 ---
