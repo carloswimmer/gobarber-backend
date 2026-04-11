@@ -1,11 +1,13 @@
 # GoBarber — Backend API
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](https://opensource.org/licenses/MIT)
-[![TypeScript](https://img.shields.io/badge/TypeScript-3.8-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-LTS-339933?style=flat-square&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
-[![Express](https://img.shields.io/badge/Express-4.17-000000?style=flat-square&logo=express&logoColor=white)](https://expressjs.com/)
-[![TypeORM](https://img.shields.io/badge/TypeORM-0.2-FE0902?style=flat-square)](https://typeorm.io/)
-[![Jest](https://img.shields.io/badge/Jest-26-C21325?style=flat-square&logo=jest&logoColor=white)](https://jestjs.io/)
+<p align="center">
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License: MIT" /></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-3.8-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" /></a>
+  <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node.js-LTS-339933?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node.js" /></a>
+  <a href="https://expressjs.com/"><img src="https://img.shields.io/badge/Express-4.17-000000?style=flat-square&logo=express&logoColor=white" alt="Express" /></a>
+  <a href="https://typeorm.io/"><img src="https://img.shields.io/badge/TypeORM-0.2-FE0902?style=flat-square" alt="TypeORM" /></a>
+  <a href="https://jestjs.io/"><img src="https://img.shields.io/badge/Jest-26-C21325?style=flat-square&logo=jest&logoColor=white" alt="Jest" /></a>
+</p>
 
 REST API for **GoBarber**, a scheduling platform where clients book time with barbers and service providers. This service handles accounts, authentication, profiles, availability, appointments, and provider notifications—so the front end can focus on the experience.
 
