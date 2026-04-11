@@ -1,69 +1,138 @@
-# Recuperação de senha
+# GoBarber — Backend API
 
-**RF**
+REST API for **GoBarber**, a scheduling platform where clients book time with barbers and service providers. This service handles accounts, authentication, profiles, availability, appointments, and provider notifications—so the front end can focus on the experience.
 
-- O usuário deve poder recuperar sua senha informando o seu e-mail;
-- O usuário deve receber um e-mail com instruções de recuperação de senha;
-- O usuário deve poder resetar sua senha;
+---
 
-**RNF**
+## Why this project
 
-- Utilizar Mailtrap para testar envios de e-mail em ambiente de desenvolvimento;
-- Utilizar Amazon SES para envios em produção;
-- O envio de e-mails deve acontecer em segundo plano (background job);
+- **Clear domain**: users sign in, manage profiles, browse providers, and book 1-hour slots within business hours—with rules that prevent double-booking and invalid times.
+- **Practical stack**: TypeScript, Express, and TypeORM on PostgreSQL, with Redis for caching and MongoDB for notifications—patterns you see in real products.
+- **Tested workflows**: Jest specs cover critical services (auth, appointments, password reset, and more).
 
-**RN**
+For the full requirement breakdown (functional, non-functional, and business rules), see **[SPEC.md](./SPEC.md)**.
 
-- O link enviado por e-mail para resetar senha, deve expirar em 2h;
-- O usuário precisa confirmar a nova senha ao resetá-la;
+---
 
-# Atualização do perfil
+## Features
 
-**RF**
+| Area | What you get |
+|------|----------------|
+| **Accounts** | Registration, JWT sessions, password recovery with token flow |
+| **Profile** | Update name, email, password, and avatar (local disk storage by default) |
+| **Providers & scheduling** | List providers, month/day availability, create appointments with validation |
+| **Provider dashboard** | Day view of appointments; notifications with read/unread state (MongoDB) |
+| **Ops** | Rate limiting, Celebrate validation, structured `AppError` responses |
 
-- O usuário deve poder atualizar seu usuário, nome e senha;
+---
 
-**RN**
+## Tech stack
 
-- O usuário não pode alterar seu email para um e-mail já utilizado;
-- Para atualizar sua senha, o usuário deve informar a senha antiga;
-- Para atualizar sua senha, o usuário precisa confirmar a nova senha;
+- **Runtime**: Node.js, TypeScript  
+- **HTTP**: Express, CORS, `express-async-errors`  
+- **Data**: TypeORM — PostgreSQL (users, appointments, tokens) + MongoDB (notifications)  
+- **Cache**: Redis (ioredis)  
+- **Auth**: JWT (`jsonwebtoken`), `bcryptjs`  
+- **Uploads**: Multer, configurable storage (disk / AWS-ready patterns)  
+- **Email**: Nodemailer — Ethereal in dev; SES driver available for production (`aws-sdk`)  
+- **DI & quality**: TSyringe, ESLint (Airbnb), Prettier, Jest  
 
-# Painel do prestador
+---
 
-**RF**
+## Prerequisites
 
-- O usuário deve poder listar seus agendamentos de um dia específico;
-- O prestador deve receber uma notificação sempre que houver um novo agendamento;
-- O prestador deve poder visualizar as notificações não lidas;
+- Node.js (compatible with the TypeScript version in `package.json`)
+- **PostgreSQL** (with `uuid-ossp` or compatible UUID setup used by migrations)
+- **Redis**
+- **MongoDB** (notifications)
 
-**RNF**
+---
 
-- Os agendamentos do prestador no dia devem ser armazenados em cache;
-- As notificações do prestador devem ser armazenadas no MongoDB;
-- As notificações do prestador devem ser enviadas em tempo real utilizando Socket.io;
+## Getting started
 
-**RN**
+1. **Clone and install**
 
-- A notificação deve ter um status de lida ou não lida para que o prestador possa controlar;
+   ```bash
+   git clone <your-fork-url>
+   cd gobarber-backend
+   yarn install
+   ```
 
-# Agendamento de serviços
+2. **Environment**
 
-**RF**
+   ```bash
+   cp .env.example .env
+   ```
 
-- O usuário deve poder listar todos os prestadores de serviço cadastrados;
-- O usuário deve poder listar os dias de um mês com pelo menos um horário disponível de um prestador;
-- O usuário deve poder listar os horários disponíveis em um dia específico de um prestador;
-- O usuário deve poder realizar um novo agendamento com um prestador;
+   Fill in `APP_SECRET`, URLs, Redis, and AWS keys if you use SES. Adjust `MAIL_DRIVER` and `STORAGE_DRIVER` as needed (`ethereal` / `ses`, `disk`, etc.).
 
-**RNF**
+3. **Database configuration**
 
-- A listagem de prestadores deve ser armazenada em cache;
+   ```bash
+   cp ormconfig.example.json ormconfig.json
+   ```
 
-**RN**
+   Edit **`ormconfig.json`** with your PostgreSQL and MongoDB hosts, ports, users, and database names. Keep the connection names **`default`** (PostgreSQL) and **`mongo`** (MongoDB)—the app expects those names.
 
-- Cada agendamento deve durar 1h exatamente;
-- Os agendamentos devem estar disponíveis entre 8h às 18h (Primeiro às 8h último às 17h);
-- O usuário não pode agendar em um horário já ocupado;
-- O usuário não pode agendar em um horário que já passou;
-- O usuário não pode agendar um horário consigo mesmo;
+   Ensure PostgreSQL has the **`uuid-ossp`** extension available (migrations use `uuid_generate_v4()`).
+
+   If you compile to `dist/` for production, point `entities` in `ormconfig.json` at the compiled `.js` files under `dist/` instead of `src/`.
+
+4. **Migrations**
+
+   Run TypeORM migrations against your PostgreSQL database (see the `typeorm` script in `package.json` and the files under `src/shared/infra/typeorm/migrations/`). Example:
+
+   ```bash
+   yarn typeorm migration:run
+   ```
+
+5. **Run the API**
+
+   ```bash
+   yarn dev:server
+   ```
+
+   The server listens on **port 3333** by default (see `src/shared/infra/http/server.ts`).
+
+---
+
+## Scripts
+
+| Command | Purpose |
+|---------|---------|
+| `yarn dev:server` | Dev server with reload and inspector |
+| `yarn build` | Compile TypeScript to `dist/` |
+| `yarn start` | Run compiled entry (or adjust for production) |
+| `yarn test` | Jest test suite |
+| `yarn typeorm` | TypeORM CLI (migrations, etc.) |
+
+---
+
+## HTTP routes (overview)
+
+| Prefix | Module |
+|--------|--------|
+| `/sessions` | Login |
+| `/users` | User registration & avatar |
+| `/password` | Forgot / reset password |
+| `/profile` | Authenticated profile updates |
+| `/providers` | Provider listing & availability |
+| `/appointments` | Booking |
+
+Static uploaded files are served under `/files` when using disk storage.
+
+---
+
+## Project layout
+
+- `src/modules/` — Feature modules (`users`, `appointments`, `notifications`)
+- `src/shared/` — HTTP bootstrap, TypeORM, DI container, providers (cache, mail, storage)
+- `src/config/` — Auth, upload, cache helpers
+
+Path aliases: `@modules/*`, `@config/*`, `@shared/*` (see `tsconfig.json`).
+
+---
+
+## License
+
+MIT — see `package.json`.
