@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: postgres:16.5-alpine
+    container_name: gobarber-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: gobarber
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/01-uuid-ossp.sql:ro
+
+  redis:
+    image: redis:7-alpine
+    container_name: gobarber-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  mongo:
+    image: mongo:7
+    container_name: gobarber-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  postgres_data:
+  redis_data:
+  mongo_data:
