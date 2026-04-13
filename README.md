@@ -1,7 +1,5 @@
 # GoBarber — Backend API
 
-![GoBarber dashboard hero](./docs/image/screenshot.jpg)
-
 <p align="center">
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License: MIT" /></a>
   <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-3.8-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" /></a>
@@ -53,8 +51,9 @@ For the full requirement breakdown (functional, non-functional, and business rul
 ## Prerequisites
 
 - Node.js (compatible with the TypeScript version in `package.json`)
-- **Docker + Docker Compose** (recommended for local databases)
-- OR local services for **PostgreSQL**, **Redis**, and **MongoDB**
+- **PostgreSQL** (with `uuid-ossp` or compatible UUID setup used by migrations)
+- **Redis**
+- **MongoDB** (notifications)
 
 ---
 
@@ -63,7 +62,7 @@ For the full requirement breakdown (functional, non-functional, and business rul
 1. **Clone and install**
 
    ```bash
-   git clone https://github.com/carloswimmer/gobarber-backend.git
+   git clone <your-fork-url>
    cd gobarber-backend
    yarn install
    ```
@@ -88,15 +87,7 @@ For the full requirement breakdown (functional, non-functional, and business rul
 
    If you compile to `dist/` for production, point `entities` in `ormconfig.json` at the compiled `.js` files under `dist/` instead of `src/`.
 
-4. **Start databases (Docker Compose)**
-
-   ```bash
-   docker compose up -d
-   ```
-
-   This starts `postgres`, `redis`, and `mongo` from `docker-compose.yml`. PostgreSQL runs `docker/postgres/init.sql` on first startup to enable `uuid-ossp`.
-
-5. **Migrations**
+4. **Migrations**
 
    Run TypeORM migrations against your PostgreSQL database (see the `typeorm` script in `package.json` and the files under `src/shared/infra/typeorm/migrations/`). Example:
 
@@ -104,19 +95,7 @@ For the full requirement breakdown (functional, non-functional, and business rul
    yarn typeorm migration:run
    ```
 
-6. **(Optional) Seed appointments data**
-
-   ```bash
-   yarn seed:appointments
-   ```
-
-   The seed creates two users (`john-barber@gmail.com` and `sam-client@gmail.com`) both with password `12345678`, and 8 upcoming business-hour appointments between them. To remove this sample data:
-
-   ```bash
-   yarn seed:reset-appointments
-   ```
-
-7. **Run the API**
+5. **Run the API**
 
    ```bash
    yarn dev:server
@@ -135,8 +114,6 @@ For the full requirement breakdown (functional, non-functional, and business rul
 | `yarn start` | Run compiled entry (or adjust for production) |
 | `yarn test` | Jest test suite |
 | `yarn typeorm` | TypeORM CLI (migrations, etc.) |
-| `yarn seed:appointments` | Seed 8 upcoming appointments + sample users |
-| `yarn seed:reset-appointments` | Remove seed users and related appointments |
 
 ---
 
